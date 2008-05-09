@@ -124,14 +124,14 @@ Requires:       plexus-utils
 
 %package component-api-javadoc
 Summary:        Javadoc for plexus-component-api
-Group:          Development/Documentation
+Group:          Development/Java
 
 %description component-api-javadoc
 %{summary}.
 
 %package container-default-javadoc
 Summary:        Javadoc for plexus-container-default
-Group:          Development/Documentation
+Group:          Development/Java
 
 %description container-default-javadoc
 %{summary}.
