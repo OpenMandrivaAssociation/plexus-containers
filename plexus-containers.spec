@@ -43,7 +43,7 @@
 
 Name:           plexus-containers
 Version:        1.0
-Release:        %mkrel 0.a30.1.0.1
+Release:        %mkrel 2.a30.1.0.1
 Epoch:          0
 Summary:        Default Plexus Container
 License:        Apache Software License 2.0
