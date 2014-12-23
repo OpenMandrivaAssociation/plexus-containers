@@ -1,29 +1,17 @@
 %{?_javapackages_macros:%_javapackages_macros}
-%global with_maven 1
-
-%global parent plexus
-%global subname containers
-
 # this needs to be exact version of maven-javadoc-plugin for
 # integration tests
-%global javadoc_plugin_version 2.9.1
-
-Name:           %{parent}-%{subname}
-Version:        1.5.5
-Release:        14.1%{?dist}
+%global javadoc_plugin_version 2.10.1
+%global bootstrap 1
+Name:           plexus-containers
+Version:        1.6
+Release:        1.1
+Group:		Development/Java
 Summary:        Containers for Plexus
 License:        ASL 2.0 and MIT
 URL:            http://plexus.codehaus.org/
-# svn export \
-#  http://svn.codehaus.org/plexus/plexus-containers/tags/plexus-containers-1.5.5
-# tar caf plexus-containers-1.5.5.tar.xz plexus-containers-1.5.5
-Source0:        %{name}-%{version}.tar.xz
-Source1:        plexus-container-default-build.xml
-Source2:        plexus-component-annotations-build.xml
-Source3:        plexus-containers-settings.xml
-
-Patch0:         0001-Fix-test-oom.patch
-Patch1:         0002-Update-to-Plexus-Classworlds-2.5.patch
+Source0:        https://github.com/sonatype/%{name}/archive/%{name}-%{version}.tar.gz
+Source1:	plexus-containers-component-metadata-1.6-1.fc22.noarch.rpm
 
 BuildArch:      noarch
 
@@ -40,11 +28,8 @@ BuildRequires:  plexus-utils
 BuildRequires:  plexus-cli
 BuildRequires:  xbean
 BuildRequires:  guava
-
-Requires:       plexus-classworlds >= 2.5
-Requires:       plexus-utils
-Requires:       xbean
-Requires:       guava
+BuildRequires: objectweb-asm >= 5.0.2
+BuildRequires:	qdox >= 2.0
 
 
 %description
@@ -96,19 +81,17 @@ Obsoletes:      %{name}-container-default-javadoc < %{version}-%{release}
 %{summary}.
 
 %prep
-%setup -q -n plexus-containers-%{version}
-
-cp %{SOURCE1} plexus-container-default/build.xml
-cp %{SOURCE2} plexus-component-annotations/build.xml
-
-%patch0 -p1
-%patch1 -p1
+%setup -q -n %{name}-%{name}-%{version}
 
 # For Maven 3 compat
 %pom_add_dep org.apache.maven:maven-core plexus-component-metadata
 
-# OpenJDK7 compatibility
+%pom_remove_dep com.sun:tools plexus-component-javadoc
 %pom_add_dep com.sun:tools plexus-component-javadoc
+
+%if %bootstrap
+%pom_disable_module plexus-component-metadata
+%endif
 
 # Generate OSGI info
 %pom_xpath_inject "pom:project" "
@@ -146,9 +129,15 @@ sed -i "s|<version>2.3</version>|<version> %{javadoc_plugin_version}</version>|"
 
 %install
 %mvn_install
-%if 0%{?fedora}
-%else
-sed -i 's|<version>3.8.2</version>||;' %{buildroot}%{_mavendepmapfragdir}/*.xml
+
+%if %bootstrap
+touch .mfiles-plexus-component-metadata
+pushd %buildroot
+
+rpm2cpio %{SOURCE1} | cpio -idmv
+
+popd
+
 %endif
 
 # plexus-containers pom goes into main package
@@ -156,6 +145,12 @@ sed -i 's|<version>3.8.2</version>||;' %{buildroot}%{_mavendepmapfragdir}/*.xml
 %files component-annotations -f .mfiles-plexus-component-annotations
 %files container-default -f .mfiles-plexus-container-default
 %files component-metadata -f .mfiles-plexus-component-metadata
+%if %bootstrap
+%_datadir/java/plexus-containers/plexus-component-metadata.jar
+%_datadir/maven-metadata/plexus-containers-plexus-component-metadata.xml
+%_datadir/maven-poms/plexus-containers/plexus-component-metadata.pom
+%endif
+
 %files component-javadoc -f .mfiles-plexus-component-javadoc
 
 %files javadoc -f .mfiles-javadoc

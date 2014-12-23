@@ -1,2 +1,5 @@
-sources:
+removed_sources:
   plexus-containers-1.5.5.tar.xz: f0e9a95c0ec4df5e0e35e481a8580a9aee469415
+sources:
+  plexus-containers-1.6.tar.gz: edfa788ad5a8309a82804cde368da05b3fe1fc19
+  plexus-containers-component-metadata-1.6-1.fc22.noarch.rpm: 1d9a3e3eed59500b2a64e44e2d05cbd40ecc1855
