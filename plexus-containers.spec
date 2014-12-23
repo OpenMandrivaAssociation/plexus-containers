@@ -2,10 +2,10 @@
 # this needs to be exact version of maven-javadoc-plugin for
 # integration tests
 %global javadoc_plugin_version 2.10.1
-%global bootstrap 1
+%global bootstrap 0
 Name:           plexus-containers
 Version:        1.6
-Release:        1.1
+Release:        1.2
 Group:		Development/Java
 Summary:        Containers for Plexus
 License:        ASL 2.0 and MIT
