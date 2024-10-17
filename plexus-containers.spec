@@ -9,7 +9,7 @@ Release:        1.4
 Group:		Development/Java
 Summary:        Containers for Plexus
 License:        ASL 2.0 and MIT
-URL:            http://plexus.codehaus.org/
+URL:            https://plexus.codehaus.org/
 Source0:        https://github.com/sonatype/%{name}/archive/%{name}-%{version}.tar.gz
 Source1:	plexus-containers-component-metadata-1.6-1.fc22.noarch.rpm
 
